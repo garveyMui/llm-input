@@ -1,0 +1,28 @@
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "jsx": "react",
+    "strict": true,
+    "declaration": true,
+    "declarationDir": "./dist/types",
+    "outDir": "./dist",
+    "emitDeclarationOnly": false,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "importHelpers": true,
+    "skipLibCheck": false,
+    "noEmit": false,
+    "sourceMap": true,
+    "lib": ["ESNext", "DOM"],
+    "allowSyntheticDefaultImports": true,
+    "paths": {
+      "@/*": ["./src/*"]
+    },
+  },
+  "include": [
+    "src",
+    "rollup.config.js"
+  ],
+  "exclude": ["/node_modules/", "dist"]
+}
