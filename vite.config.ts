@@ -40,8 +40,9 @@ export default defineConfig({
   },
   resolve: {
     alias: {
-      'react': 'https://cdn.skypack.dev/react@19',
-      'react-dom': 'https://cdn.skypack.dev/react-dom@19'
+      // 'react': 'https://cdn.skypack.dev/react@19',
+      // 'react-dom': 'https://cdn.skypack.dev/react-dom@19',
+      '@': '/src'
     }
   }
 })
