@@ -1,14 +1,38 @@
-import React from 'react';
-import {Input} from "@/components/Input";
-import {InputContextProvider} from "@/contexts/Input/Input";
+import React, { useEffect } from "react";
+import { Input } from "@/components/ui/Input";
+import { InputContextProvider } from "@/contexts/Input/Input";
+import { ChatList } from "@/components/ui/ChatList";
+import { AppDispatch, RootState, useTypedSelector } from "@/store";
+import { useDispatch, useSelector } from "react-redux";
+import { MessageI, postMessage, pushMessage } from "@/store/Messages";
+import { PayloadAction } from "@reduxjs/toolkit";
 
 export const App: React.FC = () => {
+  const { messagesList } = useTypedSelector(
+    (state: RootState) => state.messages,
+  );
+  console.log(messagesList);
+  const dispatch = useDispatch();
+  const handleSend = async (message: string) => {
+    const messageToPost: MessageI = {
+      content: message,
+      role: "user",
+      name: "wanger",
+    };
+    dispatch(
+      pushMessage({
+        content: message,
+        role: "user",
+      }),
+    );
+    dispatch((await postMessage([messageToPost])) as PayloadAction<MessageI>);
+  };
   return (
     <div className="App">
-        <InputContextProvider>
-            <Input />
-        </InputContextProvider>
+      <ChatList messages={messagesList} />
+      <InputContextProvider values={handleSend}>
+        <Input handleSend={handleSend} />
+      </InputContextProvider>
     </div>
   );
 };
-

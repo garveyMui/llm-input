@@ -16,6 +16,7 @@
     "sourceMap": true,
     "lib": ["ESNext", "DOM"],
     "allowSyntheticDefaultImports": true,
+    "resolveJsonModule": true,
     "paths": {
       "@/*": ["./src/*"]
     },
