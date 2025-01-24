@@ -4,7 +4,11 @@ import { AxiosResponse } from "axios";
 
 export const postMessages: (
   messages: MessagesList,
-) => Promise<AxiosResponse<ChatCompletionResponse>> = (messages) => {
+  streaming: boolean,
+) => Promise<AxiosResponse<ChatCompletionResponse>> = (
+  messages,
+  streaming = false,
+) => {
   console.log(messages);
   const dispatchMessage = {
     messages,
@@ -16,7 +20,7 @@ export const postMessages: (
       type: "text",
     },
     stop: null,
-    stream: false,
+    stream: streaming,
     stream_options: null,
     temperature: 1,
     top_p: 1,

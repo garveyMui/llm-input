@@ -4,7 +4,12 @@ import { InputContextProvider } from "@/contexts/Input/Input";
 import { ChatList } from "@/components/ui/ChatList";
 import { AppDispatch, RootState, useTypedSelector } from "@/store";
 import { useDispatch, useSelector } from "react-redux";
-import { MessageI, postMessage, pushMessage } from "@/store/Messages";
+import {
+  MessageI,
+  postMessage,
+  postMessageStreaming,
+  pushMessage,
+} from "@/store/Messages";
 import { PayloadAction } from "@reduxjs/toolkit";
 
 export const App: React.FC = () => {
@@ -25,7 +30,9 @@ export const App: React.FC = () => {
         role: "user",
       }),
     );
-    dispatch((await postMessage([messageToPost])) as PayloadAction<MessageI>);
+    dispatch(
+      (await postMessageStreaming([messageToPost])) as PayloadAction<MessageI>,
+    );
   };
   return (
     <div className="App">
