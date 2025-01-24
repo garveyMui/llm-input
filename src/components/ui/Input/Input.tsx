@@ -5,17 +5,19 @@ interface InputProps {
   handleSend: (message: string) => void;
 }
 export const Input: React.FC<InputProps> = ({ handleSend }) => {
-  const { inputValue, handleChange, isChineseInput } = useInputContext();
+  const { inputValue, setInputValue, handleChange, isChineseInput } =
+    useInputContext();
   return (
     <div>
       <form
         onSubmit={(e) => {
           e.preventDefault(); // 阻止默认表单提交行为
           handleSend(inputValue); // 调用传入的 handleSend 方法
+          setInputValue("");
         }}
       >
         <textarea
-          placeholder="Digite o valor"
+          placeholder="Let's chat!😍"
           value={inputValue}
           onChange={handleChange}
           onCompositionStart={() => {
@@ -28,6 +30,7 @@ export const Input: React.FC<InputProps> = ({ handleSend }) => {
             if (e.key === "Enter") {
               e.preventDefault();
               handleSend(inputValue);
+              setInputValue("");
             }
           }}
         />

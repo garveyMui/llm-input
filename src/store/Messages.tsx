@@ -74,7 +74,7 @@ export const postMessageStreaming = async (messages: MessagesList) => {
           const reader = response.body.getReader();
           const stream = new ReadableStream({
             start(controller) {
-              let accumulatedText = "";
+              let first = true;
               function push() {
                 reader
                   .read()
@@ -87,22 +87,37 @@ export const postMessageStreaming = async (messages: MessagesList) => {
                     // accumulatedText += chunk;
                     const match = chunk.match(/{"content":".*?"}/g);
                     if (match) {
-                      // Dispatch the message when a complete one is found
-                      dispatch(
-                        updateLastMessage({
-                          content: "".concat(
-                            ...match.map((item) => {
-                              return item
-                                .toString()
-                                .substring(12, item.length - 2);
-                            }),
-                          ),
-                          role: "assistant",
-                        }),
-                      );
+                      if (first) {
+                        first = false;
+                        dispatch(
+                          pushMessage({
+                            content: "".concat(
+                              ...match.map((item) => {
+                                return item
+                                  .toString()
+                                  .substring(12, item.length - 2);
+                              }),
+                            ),
+                            role: "assistant",
+                          }),
+                        );
+                      } else {
+                        dispatch(
+                          updateLastMessage({
+                            content: "".concat(
+                              ...match.map((item) => {
+                                return item
+                                  .toString()
+                                  .substring(12, item.length - 2);
+                              }),
+                            ),
+                            role: "assistant",
+                          }),
+                        );
+                      }
                     } else {
                       dispatch(
-                        pushMessage({
+                        updateLastMessage({
                           content: "not match",
                           role: "assistant",
                         }),
