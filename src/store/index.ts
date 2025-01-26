@@ -1,5 +1,5 @@
 import { AnyAction, configureStore } from "@reduxjs/toolkit";
-import messagesReducer, { MessageI } from "./Messages";
+import messagesReducer, { NetworkMessageI } from "./Messages";
 import { ThunkAction, ThunkDispatch } from "redux-thunk";
 import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
 
@@ -12,7 +12,7 @@ export const store = configureStore({
 });
 
 export interface RootState {
-  messages: Array<MessageI>;
+  messages: Array<NetworkMessageI>;
 }
 
 export type AppDispatch = typeof store.dispatch;

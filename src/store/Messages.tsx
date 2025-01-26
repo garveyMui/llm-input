@@ -7,15 +7,16 @@ const messagesSlice = createSlice({
   name: "messages",
   initialState: { messagesList: [] as MessagesList }, // 初始状态
   reducers: {
-    pushMessage: (state, action: PayloadAction<MessageI>) => {
+    pushMessage: (state, action: PayloadAction<RenderMessageI>) => {
       state.messagesList.push(action.payload);
     },
-    updateLastMessage: (state, action: PayloadAction<MessageI>) => {
+    updateLastMessage: (state, action: PayloadAction<RenderMessageI>) => {
       const length = state.messagesList.length;
       if (length === 0) {
         state.messagesList.push(action.payload);
       } else {
         state.messagesList[length - 1].content += action.payload.content;
+        state.messagesList[length - 1].connecting = false;
       }
     },
   },
@@ -26,11 +27,11 @@ export const postMessage = async (messages: MessagesList) => {
   return async (dispatch: AppDispatch) => {
     try {
       const response = await postMessages(messages, false);
-      const message: MessageI = response.data.choices[0].message;
+      const message: NetworkMessageI = response.data.choices[0].message;
       dispatch({
         type: "messages/pushMessage",
         payload: message,
-      } as PayloadAction<MessageI>);
+      } as PayloadAction<NetworkMessageI>);
     } catch (error) {
       console.error("Error posting message: ", error);
     }
@@ -74,7 +75,6 @@ export const postMessageStreaming = async (messages: MessagesList) => {
           const reader = response.body.getReader();
           const stream = new ReadableStream({
             start(controller) {
-              let first = true;
               function push() {
                 reader
                   .read()
@@ -87,39 +87,25 @@ export const postMessageStreaming = async (messages: MessagesList) => {
                     // accumulatedText += chunk;
                     const match = chunk.match(/{"content":".*?"}/g);
                     if (match) {
-                      if (first) {
-                        first = false;
-                        dispatch(
-                          pushMessage({
-                            content: "".concat(
-                              ...match.map((item) => {
-                                return item
-                                  .toString()
-                                  .substring(12, item.length - 2);
-                              }),
-                            ),
-                            role: "assistant",
-                          }),
-                        );
-                      } else {
-                        dispatch(
-                          updateLastMessage({
-                            content: "".concat(
-                              ...match.map((item) => {
-                                return item
-                                  .toString()
-                                  .substring(12, item.length - 2);
-                              }),
-                            ),
-                            role: "assistant",
-                          }),
-                        );
-                      }
+                      dispatch(
+                        updateLastMessage({
+                          content: "".concat(
+                            ...match.map((item) => {
+                              return item
+                                .toString()
+                                .substring(12, item.length - 2);
+                            }),
+                          ),
+                          role: "assistant",
+                          connecting: false,
+                        }),
+                      );
                     } else {
                       dispatch(
                         updateLastMessage({
                           content: "not match",
                           role: "assistant",
+                          connecting: false,
                         }),
                       );
                     }
@@ -148,39 +134,49 @@ export const postMessageStreaming = async (messages: MessagesList) => {
   };
 };
 
+export const postMessageStremingConversation = async (
+  messages: MessagesList,
+) => {
+  postMessageStreaming(messages);
+};
+
 export default messagesSlice.reducer;
 
-interface SystemMessageI {
-  content: string;
+interface SystemMessageI extends BaseMessageI {
   role: "system";
   name?: string;
 }
 
-interface UserMessageI {
-  content: string;
+interface UserMessageI extends BaseMessageI {
   role: "user";
   name?: string;
 }
 
-interface AssistantMessageI {
-  content: string;
+interface AssistantMessageI extends BaseMessageI {
   role: "assistant";
   name?: string;
   prefix?: boolean;
   reasoning_content?: string;
 }
 
-interface ToolMessagesI {
+interface ToolMessagesI extends BaseMessageI {
   role: "tool";
-  content: string;
   tool_call_id: string;
 }
-export type MessageI =
+
+interface BaseMessageI {
+  content: string;
+  role: "system" | "user" | "assistant" | "tool";
+}
+export type NetworkMessageI =
   | SystemMessageI
   | UserMessageI
   | AssistantMessageI
   | ToolMessagesI;
-export type MessagesList = Array<MessageI>;
+export interface RenderMessageI extends BaseMessageI {
+  connecting: boolean;
+}
+export type MessagesList = Array<RenderMessageI>;
 export interface ChatCompletionResponse {
   id: string;
   choices: {
@@ -191,7 +187,7 @@ export interface ChatCompletionResponse {
       | "tool_calls"
       | "insufficient_system_resource";
     index: number;
-    message: MessageI;
+    message: NetworkMessageI;
     logprobs?: {
       content: {
         token: string;

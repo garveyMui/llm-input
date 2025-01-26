@@ -16,7 +16,7 @@ export const InputContextProvider: React.FC<{
 }> = ({ children, values }) => {
   const textAreaRef = useRef<HTMLTextAreaElement>(null);
   const isChineseInput = useRef(false);
-  const [inputValue, setInputValue] = React.useState("storybook");
+  const [inputValue, setInputValue] = React.useState("你好");
   const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
   };
