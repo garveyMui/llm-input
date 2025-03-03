@@ -1,5 +1,6 @@
 import React from "react";
 import { useInputContext } from "@/contexts/Input/Input";
+import { FileAddTwoTone, PictureTwoTone } from "@ant-design/icons";
 
 interface InputProps {
   handleSend: (message: string) => void;
@@ -11,12 +12,14 @@ export const Input: React.FC<InputProps> = ({ handleSend }) => {
     <div>
       <form
         onSubmit={(e) => {
-          e.preventDefault(); // 阻止默认表单提交行为
-          handleSend(inputValue); // 调用传入的 handleSend 方法
+          e.preventDefault();
+          handleSend(inputValue);
           setInputValue("");
         }}
       >
         <textarea
+          className="w-full p-4 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+          style={{ resize: "none" }}
           placeholder="Let's chat!😍"
           value={inputValue}
           onChange={handleChange}
@@ -35,6 +38,8 @@ export const Input: React.FC<InputProps> = ({ handleSend }) => {
           }}
         />
         <button type={"submit"}>send</button>
+        <FileAddTwoTone />
+        <PictureTwoTone />
       </form>
     </div>
   );

@@ -5,7 +5,7 @@ import { ChatList } from "@/components/ui/ChatList";
 import { AppDispatch, RootState, useTypedSelector } from "@/store";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  MessageI,
+  NetworkMessageI,
   postMessage,
   postMessageStreaming,
   pushMessage,
@@ -13,13 +13,12 @@ import {
 import { PayloadAction } from "@reduxjs/toolkit";
 
 export const App: React.FC = () => {
-  const { messagesList } = useTypedSelector(
+  const { messagesList: history } = useTypedSelector(
     (state: RootState) => state.messages,
   );
-  console.log(messagesList);
   const dispatch = useDispatch();
   const handleSend = async (message: string) => {
-    const messageToPost: MessageI = {
+    const messageToPost: NetworkMessageI = {
       content: message,
       role: "user",
       name: "wanger",
@@ -28,15 +27,26 @@ export const App: React.FC = () => {
       pushMessage({
         content: message,
         role: "user",
+        connecting: false,
       }),
     );
     dispatch(
-      (await postMessageStreaming([messageToPost])) as PayloadAction<MessageI>,
+      pushMessage({
+        content: "",
+        role: "assistant",
+        connecting: true,
+      }),
+    );
+    dispatch(
+      (await postMessageStreaming([
+        ...history,
+        messageToPost,
+      ])) as PayloadAction<NetworkMessageI>,
     );
   };
   return (
     <div className="App">
-      <ChatList messages={messagesList} />
+      <ChatList messages={history} />
       <InputContextProvider values={handleSend}>
         <Input handleSend={handleSend} />
       </InputContextProvider>
