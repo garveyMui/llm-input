@@ -18,7 +18,7 @@ export const Input: React.FC<InputProps> = ({ handleSend }) => {
         }}
       >
         <textarea
-          className="w-full p-4 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+          className="w-[60vw] m-4 p-4 border border-gray-300 rounded-lg shadow-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
           style={{ resize: "none" }}
           placeholder="Let's chat!😍"
           value={inputValue}
@@ -37,7 +37,12 @@ export const Input: React.FC<InputProps> = ({ handleSend }) => {
             }
           }}
         />
-        <button type={"submit"}>send</button>
+        <button
+          className="w-16 h-16 rounded-full flex justify-center items-center shadow-md transition-all bg-blue-500 hover:bg-blue-700 text-white font-bold"
+          type={"submit"}
+        >
+          send
+        </button>
         <FileAddTwoTone />
         <PictureTwoTone />
       </form>

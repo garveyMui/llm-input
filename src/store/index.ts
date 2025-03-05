@@ -1,7 +1,6 @@
-import { AnyAction, configureStore } from "@reduxjs/toolkit";
-import messagesReducer, { NetworkMessageI } from "./Messages";
-import { ThunkAction, ThunkDispatch } from "redux-thunk";
-import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import { configureStore } from "@reduxjs/toolkit";
+import messagesReducer, { RenderMessageI} from "./Messages";
+import { TypedUseSelectorHook, useSelector } from "react-redux";
 
 // 配置 Redux store
 export const store = configureStore({
@@ -11,9 +10,6 @@ export const store = configureStore({
   middleware: (getDefaultMiddleware) => getDefaultMiddleware(),
 });
 
-export interface RootState {
-  messages: Array<NetworkMessageI>;
-}
-
+export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 export const useTypedSelector: TypedUseSelectorHook<RootState> = useSelector;

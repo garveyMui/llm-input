@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { postMessages } from "@/services/api";
-import { AppDispatch } from "@/store/index";
+import {AppDispatch, RootState} from "@/store/index";
 import llmService from "@/assets/APIKey.json";
 
 const messagesSlice = createSlice({
@@ -19,10 +19,29 @@ const messagesSlice = createSlice({
         state.messagesList[length - 1].connecting = false;
       }
     },
+    retryMessage: (state, action: PayloadAction<number>) => {
+      const index = action.payload;
+      state.messagesList = state.messagesList.slice(0, index+1);
+      state.messagesList[index].content = "";
+      state.messagesList[index].connecting = true;
+    }
   },
 });
 
-export const { pushMessage, updateLastMessage } = messagesSlice.actions;
+export const { pushMessage, updateLastMessage, retryMessage } = messagesSlice.actions;
+export const retryPostMessageStreaming = (index: number, history: MessagesList) => {
+  return async (dispatch: AppDispatch, getState: ()=>RootState) => {
+    try{
+      dispatch(retryMessage(index));
+      const history = getState().messages.messagesList;
+      dispatch(
+          (await postMessageStreaming(history.slice(0, index))) as PayloadAction<NetworkMessageI>,
+      );
+    } catch (error) {
+      console.error("Error retry posting message: ", error);
+    }
+  }
+}
 export const postMessage = async (messages: MessagesList) => {
   return async (dispatch: AppDispatch) => {
     try {
@@ -140,7 +159,6 @@ export const postMessageStremingConversation = async (
   postMessageStreaming(messages);
 };
 
-export default messagesSlice.reducer;
 
 interface SystemMessageI extends BaseMessageI {
   role: "system";
@@ -209,3 +227,5 @@ export interface ChatCompletionResponse {
     completion_tokens: number;
   };
 }
+
+export default messagesSlice.reducer;

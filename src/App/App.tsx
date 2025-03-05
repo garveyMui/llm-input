@@ -5,10 +5,10 @@ import { ChatList } from "@/components/ui/ChatList";
 import { AppDispatch, RootState, useTypedSelector } from "@/store";
 import { useDispatch, useSelector } from "react-redux";
 import {
-  NetworkMessageI,
-  postMessage,
-  postMessageStreaming,
-  pushMessage,
+    NetworkMessageI,
+    postMessage,
+    postMessageStreaming,
+    pushMessage, RenderMessageI,
 } from "@/store/Messages";
 import { PayloadAction } from "@reduxjs/toolkit";
 
@@ -18,10 +18,10 @@ export const App: React.FC = () => {
   );
   const dispatch = useDispatch();
   const handleSend = async (message: string) => {
-    const messageToPost: NetworkMessageI = {
+    const messageToPost: RenderMessageI = {
       content: message,
       role: "user",
-      name: "wanger",
+      connecting: false,
     };
     dispatch(
       pushMessage({
@@ -41,7 +41,7 @@ export const App: React.FC = () => {
       (await postMessageStreaming([
         ...history,
         messageToPost,
-      ])) as PayloadAction<NetworkMessageI>,
+      ])) as PayloadAction<RenderMessageI>,
     );
   };
   return (
