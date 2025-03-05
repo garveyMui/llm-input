@@ -30,10 +30,10 @@ export const retryRequest = async (request: any, retries: number = 3) => {
 };
 
 export const request = axios.create({
-    baseURL: llmService.baseURL,
+    baseURL: 'https://open.bigmodel.cn/api/paas/v4',
     headers: {
         'Content-Type': 'application/json',
-        'Authorization': `Bearer ${llmService.apiKey}`,
+        'Authorization': `Bearer ${llmService.chatglm.apiKey}`,
     },
 });
 

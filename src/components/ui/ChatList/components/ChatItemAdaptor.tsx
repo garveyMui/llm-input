@@ -23,7 +23,9 @@ const ItemRender: React.FC<ItemProps> = memo((props) => {
       );
     } else if (item.type === "video") {
       return <video src={item.url} controls />;
-    } else {
+    } else if(item.type === "application"){
+      return <div>{item.filename}</div>
+    }else {
       return <ChatItem messageContent={item.content} />;
     }
   } else if (item.role === "assistant") {

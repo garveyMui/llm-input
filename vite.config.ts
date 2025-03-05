@@ -7,6 +7,14 @@ import autoprefixer from "autoprefixer";
 import tailwindcss from "tailwindcss";
 // https://vite.dev/config/
 export default defineConfig({
+  test:{
+    globals: true, // 允许全局 expect、describe 等
+    environment: 'jsdom', // 用于测试 React 组件，默认是 'node'
+    setupFiles: './setupTests.ts', // 可选：添加测试设置文件
+    coverage: { // 可选：添加代码覆盖率
+      reporter: ['text', 'json', 'html'],
+    },
+  },
   css: {
     postcss: {
       plugins: [

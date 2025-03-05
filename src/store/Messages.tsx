@@ -156,7 +156,7 @@ export const postMessageStreamingVision = async (
                     } else {
                       dispatch(
                         updateLastMessage({
-                          content: "not match",
+                          content: "",
                           role: "assistant",
                           connecting: false,
                           type: "text",
@@ -352,7 +352,7 @@ interface ToolMessagesI extends BaseMessageI {
 interface BaseMessageI {
   content: string;
   role: "system" | "user" | "assistant" | "tool";
-  type: "text" | "image" | "video";
+  type: "text" | "image" | "video" | "application";
   url?: string;
 }
 export type NetworkMessageI =
@@ -362,6 +362,7 @@ export type NetworkMessageI =
   | ToolMessagesI;
 export interface RenderMessageI extends BaseMessageI {
   connecting: boolean;
+  filename?: string;
 }
 export type MessagesList = Array<RenderMessageI>;
 export interface ChatCompletionResponse {

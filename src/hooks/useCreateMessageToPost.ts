@@ -66,9 +66,10 @@ export const createMessagesToPost = (
   return messagesToPost;
 };
 export const createMessageToPost = (
-  type: "text" | "image" | "video",
+  type: "text" | "image" | "video" | "application",
   text: string | null,
   url: string | null,
+  extractContent: any | null,
 ) => {
   if (type === "text") {
     return {
@@ -106,6 +107,11 @@ export const createMessageToPost = (
           text: text==='' ? '描述这幅图': text,
         },
       ],
+    };
+  }else {
+    return {
+      role: "user",
+      content: text+'\n文档中的内容为：'+extractContent.content,
     };
   }
 };

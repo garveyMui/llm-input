@@ -22,10 +22,16 @@ export const App: React.FC = () => {
   const dispatch = useDispatch();
   const handleSend = async (
     message: string,
-    type: "text" | "image" | "video" = "text",
+    type: "text" | "image" | "video" | "application" = "text",
     url: string | null = null,
+    extractContent: any | null = null,
   ) => {
-    const messageToPost = createMessageToPost(type, message, url);
+    const messageToPost = createMessageToPost(
+      type,
+      message,
+      url,
+      extractContent,
+    );
     // console.log(messageToPost);
     dispatch(
       pushMessage({
@@ -34,6 +40,7 @@ export const App: React.FC = () => {
         connecting: false,
         type,
         url: url || undefined,
+        filename: extractContent?.filename || undefined,
       }),
     );
     dispatch(
