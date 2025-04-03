@@ -1,0 +1,34 @@
+:root {
+  --root2: 1.4142;
+  --size: 1.5rem;
+}
+.sendButton {
+  background: linear-gradient(#fff, #fff),linear-gradient(#e66465, #9198e5);
+  background-clip: padding-box, border-box;
+  background-origin: padding-box, border-box;
+  border: 2px solid transparent;
+  box-sizing: border-box;
+  width: calc(var(--size) * var(--root2) * 1.05);
+  height: calc(var(--size) * var(--root2) * 1.05);
+  animation: spinning 5s linear infinite;
+  &:hover {
+    animation-play-state: paused;
+  }
+}
+
+@keyframes spinning {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.sendLabel {
+  $offset: calc(-1 * var(--size)*(var(--root2) - 1)/2);
+  transform: translate(#{$offset}, #{$offset});
+  &:hover {
+    cursor: pointer;
+  }
+}

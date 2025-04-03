@@ -1,9 +1,9 @@
 import { defineConfig } from "vite";
 import { resolve } from "path";
 import cdn from "vite-plugin-cdn-import";
-import reactRefresh from "@vitejs/plugin-react-refresh";
 import postcss from "postcss";
 import autoprefixer from "autoprefixer";
+import react from '@vitejs/plugin-react';
 import tailwindcss from "tailwindcss";
 // https://vite.dev/config/
 export default defineConfig({
@@ -24,7 +24,7 @@ export default defineConfig({
     },
   },
   plugins: [
-    reactRefresh(),
+    react(),
     cdn({
       modules: [
         {

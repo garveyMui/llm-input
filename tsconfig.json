@@ -23,7 +23,8 @@
   },
   "include": [
     "src",
-    "rollup.config.js"
+    "rollup.config.js",
+    ".storybook/preview.ts"
   ],
   "exclude": ["/node_modules/", "dist"]
 }
