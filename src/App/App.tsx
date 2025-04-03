@@ -14,8 +14,47 @@ import {
 } from "@/store/Messages";
 import { PayloadAction } from "@reduxjs/toolkit";
 import { createMessageToPost } from "@/hooks/useCreateMessageToPost";
-
-export const App: React.FC = () => {
+interface AppProps {
+  className?: string;
+  style?: React.CSSProperties;
+  addonAfter?: any;
+  addonBefore?: any;
+  allowClear?: boolean;
+  bordered?: boolean;
+  defaultValue?: string;
+  disabled?: boolean;
+  id?: string;
+  maxLength?: number | null;
+  showCount?: boolean;
+  prefix?: string;
+  suffix?: string;
+  type?: string;
+  value?: any;
+  onChange?: (value: any) => void;
+  onPressEnter?: (event: React.KeyboardEvent<HTMLInputElement>) => void;
+  [key: string]: any; // 用于支持 ...restProps
+}
+export const App: React.FC = (props: AppProps) => {
+  const {
+    className = "",
+    style = {},
+    addonAfter = null,
+    addonBefore = null,
+    allowClear = false,
+    bordered = true,
+    defaultValue = "",
+    disabled = false,
+    id = "",
+    maxLength = null,
+    showCount = false,
+    prefix = "",
+    suffix = "",
+    type = "text",
+    value,
+    onChange,
+    onPressEnter,
+    ...restProps
+  } = props;
   const { messagesList: history } = useTypedSelector(
     (state: RootState) => state.messages,
   );
@@ -69,8 +108,12 @@ export const App: React.FC = () => {
   };
   return (
     <div className="App">
+      {/*<meta*/}
+      {/*  name={"viewport"}*/}
+      {/*  content={`initial-scale=${1 / window.devicePixelRatio || 1}`}*/}
+      {/*/>*/}
       <ChatList messages={history} />
-      <InputContextProvider values={handleSend}>
+      <InputContextProvider values={{ handleSend, ...props }}>
         <Input handleSend={handleSend} />
       </InputContextProvider>
     </div>
