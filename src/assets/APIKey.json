@@ -1,7 +1,7 @@
 {
   "deepseek": {
     "baseURL": "https://api.deepseek.com",
-    "apiKey": "sk-a666aa88c3d04fbda44fc051cca424c1"
+    "apiKey": "sk-9855e10f0f4e402f86777d5352bcfc66"
   },
   "chatglm": {
     "apiKey": "c05751ddd7121a53496a34d5eeb09c35.6UDe2ET37KCtK6zq"
