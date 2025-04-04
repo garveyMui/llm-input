@@ -1,13 +1,12 @@
 import classNames from "classnames";
 import styles from "@/components/ui/Input/Input.module.scss";
-import { Send } from "lucide-react";
+import { Loader, LoaderPinwheel, Send } from "lucide-react";
 import React, { useId } from "react";
-import {useFormStatus} from "react-dom";
-
+import { useFormStatus } from "react-dom";
 
 export default function ButtonSend({ children, ref }) {
   const sendButtonId = useId();
-  const {pending} = useFormStatus();
+  const { pending } = useFormStatus();
   return (
     <>
       <button

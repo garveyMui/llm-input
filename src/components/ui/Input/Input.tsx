@@ -1,5 +1,5 @@
 import React, { useId, useRef, useState } from "react";
-import { Send } from "lucide-react";
+import { LoaderPinwheel, Send } from "lucide-react";
 import { useInputUtils } from "@/components/ui/Input/hooks/useInputUtils";
 import TextInput from "@/components/ui/Input/_components/TextInput";
 import { FileUpload } from "@/components/ui/Input/_components/FileUpload";
@@ -45,7 +45,7 @@ export const Input: React.FC<InputProps> = ({ handleSend }) => {
     setBase64String(null);
     setInputValue("");
   };
-  const { state: submitState, formAction } = useSubmitForm(
+  const { state, formAction, isPending } = useSubmitForm(
     handleSend,
     resetState,
   );
@@ -78,18 +78,16 @@ export const Input: React.FC<InputProps> = ({ handleSend }) => {
       />
       <FileUpload
         onFileChange={(file, fileType) => {
-          setUploadFile(file);
           if (textAreaRef.current) textAreaRef.current.focus();
           const reader = new FileReader();
           reader.onload = (e) => {
             const base64 = e.target?.result;
-            setBase64String(base64 as string);
           };
           reader.readAsDataURL(file);
         }}
       />
       <ButtonSend ref={sendButtonRef}>
-        <Send />
+        {isPending ? <Send /> : <LoaderPinwheel />}
       </ButtonSend>
     </form>
   );

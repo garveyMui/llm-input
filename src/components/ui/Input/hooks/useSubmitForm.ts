@@ -16,11 +16,20 @@ export function useSubmitForm(handleSend, resetState) {
     console.log(imageFile);
     let imageFileBase64 = null;
     if (imageFile) {
-        const reader = new FileReader();
-        reader.onload = function (e) {
+      const fileToBase64 = (file: File): Promise<string> => {
+        return new Promise((resolve, reject) => {
+          const reader = new FileReader();
+          reader.onload = (e) => {
             imageFileBase64 = e.target?.result as string;
-        };
-        reader.readAsDataURL(imageFile);
+            resolve(imageFileBase64);
+          };
+          reader.onerror = (e) => {
+            reject(new Error("Error reading image"));
+          };
+          reader.readAsDataURL(file);
+        });
+      };
+      imageFileBase64 = await fileToBase64(imageFile);
     }
     let extractContent;
     if (docFile) {
