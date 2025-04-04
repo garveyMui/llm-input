@@ -113,9 +113,7 @@ export const App: React.FC = (props: AppProps) => {
       {/*  content={`initial-scale=${1 / window.devicePixelRatio || 1}`}*/}
       {/*/>*/}
       <ChatList messages={history} />
-      <InputContextProvider values={{ handleSend, ...props }}>
-        <Input handleSend={handleSend} />
-      </InputContextProvider>
+      <Input handleSend={handleSend} />
     </div>
   );
 };
